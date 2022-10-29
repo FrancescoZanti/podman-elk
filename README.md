@@ -1,32 +1,34 @@
-# Elastic stack (ELK) on Docker
+# Elastic stack (ELK) on Podman
 
-[![Elastic Stack version](https://img.shields.io/badge/Elastic%20Stack-8.4.3-00bfb3?style=flat&logo=elastic-stack)](https://www.elastic.co/blog/category/releases)
-[![Build Status](https://github.com/deviantony/docker-elk/workflows/CI/badge.svg?branch=main)](https://github.com/deviantony/docker-elk/actions?query=workflow%3ACI+branch%3Amain)
-[![Join the chat at https://gitter.im/deviantony/docker-elk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deviantony/docker-elk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<!--> [![Elastic Stack version](https://img.shields.io/badge/Elastic%20Stack-8.4.3-00bfb3?style=flat&logo=elastic-stack)](https://www.elastic.co/blog/category/releases)
+[![Build Status](https://github.com/deviantony/podman-elk/workflows/CI/badge.svg?branch=main)](https://github.com/deviantony/podman-elk/actions?query=workflow%3ACI+branch%3Amain)
+[![Join the chat at https://gitter.im/deviantony/podman-elk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deviantony/podman-elk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Run the latest version of the [Elastic stack][elk-stack] with Docker and Docker Compose.
+-->
+
+Run the latest version of the [Elastic stack][elk-stack] with Podman and Podman Compose.
 
 It gives you the ability to analyze any data set by using the searching/aggregation capabilities of Elasticsearch and
 the visualization power of Kibana.
-
+<!-->
 ![Animated demo](https://user-images.githubusercontent.com/3299086/155972072-0c89d6db-707a-47a1-818b-5f976565f95a.gif)
-
+-->
 > **Note**  
-> The Docker images backing this stack include [X-Pack][xpack] with [paid features][paid-features] enabled by default
+> The Podman images backing this stack include [X-Pack][xpack] with [paid features][paid-features] enabled by default
 > (see [How to disable paid features](#how-to-disable-paid-features) to disable them). **The [trial
 > license][trial-license] is valid for 30 days**. After this license expires, you can continue using the free features
 > seamlessly, without losing any data.
 
-Based on the official Docker images from Elastic:
+Based on the official Podman images from Elastic:
 
-* [Elasticsearch](https://github.com/elastic/elasticsearch/tree/main/distribution/docker)
-* [Logstash](https://github.com/elastic/logstash/tree/main/docker)
+* [Elasticsearch](https://github.com/elastic/elasticsearch/tree/main/distribution/podman)
+* [Logstash](https://github.com/elastic/logstash/tree/main/podman)
 * [Kibana](https://github.com/elastic/kibana/tree/main/src/dev/build/tasks/os_packages/docker_generator)
 
 Other available stack variants:
 
-* [`tls`](https://github.com/deviantony/docker-elk/tree/tls): TLS encryption enabled in Elasticsearch
-* [`searchguard`](https://github.com/deviantony/docker-elk/tree/searchguard): Search Guard support
+* [`tls`](https://github.com/deviantony/podman-elk/tree/tls): TLS encryption enabled in Elasticsearch
+* [`searchguard`](https://github.com/deviantony/podman-elk/tree/searchguard): Search Guard support
 
 ---
 
@@ -44,51 +46,51 @@ own_. [sherifabdlnaby/elastdocker][elastdocker] is one example among others of p
 
 ## Contents
 
-1. [Requirements](#requirements)
-   * [Host setup](#host-setup)
-   * [Docker Desktop](#docker-desktop)
-     * [Windows](#windows)
-     * [macOS](#macos)
-1. [Usage](#usage)
-   * [Bringing up the stack](#bringing-up-the-stack)
-   * [Initial setup](#initial-setup)
-     * [Setting up user authentication](#setting-up-user-authentication)
-     * [Injecting data](#injecting-data)
-   * [Cleanup](#cleanup)
-   * [Version selection](#version-selection)
-1. [Configuration](#configuration)
-   * [How to configure Elasticsearch](#how-to-configure-elasticsearch)
-   * [How to configure Kibana](#how-to-configure-kibana)
-   * [How to configure Logstash](#how-to-configure-logstash)
-   * [How to disable paid features](#how-to-disable-paid-features)
-   * [How to scale out the Elasticsearch cluster](#how-to-scale-out-the-elasticsearch-cluster)
-   * [How to reset a password programmatically](#how-to-reset-a-password-programmatically)
-1. [Extensibility](#extensibility)
-   * [How to add plugins](#how-to-add-plugins)
-   * [How to enable the provided extensions](#how-to-enable-the-provided-extensions)
-1. [JVM tuning](#jvm-tuning)
-   * [How to specify the amount of memory used by a service](#how-to-specify-the-amount-of-memory-used-by-a-service)
-   * [How to enable a remote JMX connection to a service](#how-to-enable-a-remote-jmx-connection-to-a-service)
-1. [Going further](#going-further)
-   * [Plugins and integrations](#plugins-and-integrations)
+- [Elastic stack (ELK) on Podman](#elastic-stack-elk-on-podman)
+  - [Philosophy](#philosophy)
+  - [Contents](#contents)
+  - [Requirements](#requirements)
+    - [Host setup](#host-setup)
+  - [> **Warning**](#-warning)
+  - [Usage](#usage)
+    - [Bringing up the stack](#bringing-up-the-stack)
+    - [Initial setup](#initial-setup)
+      - [Setting up user authentication](#setting-up-user-authentication)
+      - [Injecting data](#injecting-data)
+    - [Cleanup](#cleanup)
+    - [Version selection](#version-selection)
+  - [Configuration](#configuration)
+    - [How to configure Elasticsearch](#how-to-configure-elasticsearch)
+    - [How to configure Kibana](#how-to-configure-kibana)
+    - [How to configure Logstash](#how-to-configure-logstash)
+    - [How to disable paid features](#how-to-disable-paid-features)
+    - [How to scale out the Elasticsearch cluster](#how-to-scale-out-the-elasticsearch-cluster)
+    - [How to reset a password programmatically](#how-to-reset-a-password-programmatically)
+  - [Extensibility](#extensibility)
+    - [How to add plugins](#how-to-add-plugins)
+    - [How to enable the provided extensions](#how-to-enable-the-provided-extensions)
+  - [JVM tuning](#jvm-tuning)
+    - [How to specify the amount of memory used by a service](#how-to-specify-the-amount-of-memory-used-by-a-service)
+    - [How to enable a remote JMX connection to a service](#how-to-enable-a-remote-jmx-connection-to-a-service)
+  - [Going further](#going-further)
+    - [Plugins and integrations](#plugins-and-integrations)
 
 ## Requirements
 
 ### Host setup
 
-* [Docker Engine][docker-install] version **18.06.0** or newer
-* [Docker Compose][compose-install] version **1.26.0** or newer (including [Compose V2][compose-v2])
 * 1.5 GB of RAM
+* Podman
+* Podman Compose
 
 > **Warning**  
-> While Compose versions between **1.22.0** and **1.25.5** can technically run this stack as well, these versions have a
-> [known issue](https://github.com/deviantony/docker-elk/pull/678#issuecomment-1055555368) which prevents them from
-> parsing quoted values properly inside `.env` files.
+--
 
 > **Note**  
-> Especially on Linux, make sure your user has the [required permissions][linux-postinstall] to interact with the Docker
+<!-->
+> Especially on Linux, make sure your user has the [required permissions][linux-postinstall] to interact with the Podman
 > daemon.
-
+-->
 By default, the stack exposes the following ports:
 
 * 5044: Logstash Beats input
@@ -103,32 +105,19 @@ By default, the stack exposes the following ports:
 > stack in development environments. For production setups, we recommend users to set up their host according to the
 > instructions from the Elasticsearch documentation: [Important System Configuration][es-sys-config].
 
-### Docker Desktop
-
-#### Windows
-
-If you are using the legacy Hyper-V mode of _Docker Desktop for Windows_, ensure [File Sharing][win-filesharing] is
-enabled for the `C:` drive.
-
-#### macOS
-
-The default configuration of _Docker Desktop for Mac_ allows mounting files from `/Users/`, `/Volume/`, `/private/`,
-`/tmp` and `/var/folders` exclusively. Make sure the repository is cloned in one of those locations or follow the
-instructions from the [documentation][mac-filesharing] to add more locations.
-
 ## Usage
 
 > **Warning**  
-> You must rebuild the stack images with `docker-compose build` whenever you switch branch or update the
+> You must rebuild the stack images with `podman-compose build` whenever you switch branch or update the
 > [version](#version-selection) of an already existing stack.
 
 ### Bringing up the stack
 
-Clone this repository onto the Docker host that will run the stack, then start the stack's services locally using Docker
+Clone this repository onto the Podman host that will run the stack, then start the stack's services locally using Podman
 Compose:
 
 ```console
-$ docker-compose up
+$ podman-compose up
 ```
 
 > **Note**  
@@ -166,15 +155,15 @@ reset the passwords of all aforementioned Elasticsearch users to random secrets.
     of them.
 
     ```console
-    $ docker-compose exec elasticsearch bin/elasticsearch-reset-password --batch --user elastic
+    $ podman-compose exec elasticsearch bin/elasticsearch-reset-password --batch --user elastic
     ```
 
     ```console
-    $ docker-compose exec elasticsearch bin/elasticsearch-reset-password --batch --user logstash_internal
+    $ podman-compose exec elasticsearch bin/elasticsearch-reset-password --batch --user logstash_internal
     ```
 
     ```console
-    $ docker-compose exec elasticsearch bin/elasticsearch-reset-password --batch --user kibana_system
+    $ podman-compose exec elasticsearch bin/elasticsearch-reset-password --batch --user kibana_system
     ```
 
     If the need for it arises (e.g. if you want to [collect monitoring information][ls-monitoring] through Beats and
@@ -203,7 +192,7 @@ reset the passwords of all aforementioned Elasticsearch users to random secrets.
 1. Restart Logstash and Kibana to re-connect to Elasticsearch using the new passwords
 
     ```console
-    $ docker-compose up -d logstash kibana
+    $ podman-compose up -d logstash kibana
     ```
 
 > **Note**  
@@ -235,10 +224,10 @@ You can also load the sample data provided by your Kibana installation.
 
 Elasticsearch data is persisted inside a volume by default.
 
-In order to entirely shutdown the stack and remove all persisted data, use the following Docker Compose command:
+In order to entirely shutdown the stack and remove all persisted data, use the following Podman Compose command:
 
 ```console
-$ docker-compose down -v
+$ podman-compose down -v
 ```
 
 ### Version selection
@@ -247,18 +236,8 @@ This repository stays aligned with the latest version of the Elastic stack. The 
 version (8.x).
 
 To use a different version of the core Elastic components, simply change the version number inside the [`.env`](.env)
-file. If you are upgrading an existing stack, remember to rebuild all container images using the `docker-compose build`
+file. If you are upgrading an existing stack, remember to rebuild all container images using the `podman-compose build`
 command.
-
-> **Warning**  
-> Always pay attention to the [official upgrade instructions][upgrade] for each individual component before performing a
-> stack upgrade.
-
-Older major versions are also supported on separate branches:
-
-* [`release-7.x`](https://github.com/deviantony/docker-elk/tree/release-7.x): 7.x series
-* [`release-6.x`](https://github.com/deviantony/docker-elk/tree/release-6.x): 6.x series (End-of-life)
-* [`release-5.x`](https://github.com/deviantony/docker-elk/tree/release-5.x): 5.x series (End-of-life)
 
 ## Configuration
 
@@ -280,8 +259,8 @@ elasticsearch:
     cluster.name: my-cluster
 ```
 
-Please refer to the following documentation page for more details about how to configure Elasticsearch inside Docker
-containers: [Install Elasticsearch with Docker][es-docker].
+Please refer to the following documentation page for more details about how to configure Elasticsearch inside Podman
+containers: [Install Elasticsearch with Podman][es-podman].
 
 ### How to configure Kibana
 
@@ -296,8 +275,8 @@ kibana:
     SERVER_NAME: kibana.example.org
 ```
 
-Please refer to the following documentation page for more details about how to configure Kibana inside Docker
-containers: [Install Kibana with Docker][kbn-docker].
+Please refer to the following documentation page for more details about how to configure Kibana inside Podman
+containers: [Install Kibana with Podman][kbn-podman].
 
 ### How to configure Logstash
 
@@ -312,8 +291,8 @@ logstash:
     LOG_LEVEL: debug
 ```
 
-Please refer to the following documentation page for more details about how to configure Logstash inside Docker
-containers: [Configuring Logstash for Docker][ls-docker].
+Please refer to the following documentation page for more details about how to configure Logstash inside Podman
+containers: [Configuring Logstash for Podman][ls-podman].
 
 ### How to disable paid features
 
@@ -325,7 +304,7 @@ You can also cancel an ongoing trial before its expiry date — and thus revert 
 
 ### How to scale out the Elasticsearch cluster
 
-Follow the instructions from the Wiki: [Scaling out Elasticsearch](https://github.com/deviantony/docker-elk/wiki/Elasticsearch-cluster)
+Follow the instructions from the Wiki: [Scaling out Elasticsearch](https://github.com/deviantony/podman-elk/wiki/Elasticsearch-cluster)
 
 ### How to reset a password programmatically
 
@@ -349,7 +328,7 @@ To add plugins to any ELK component you have to:
 
 1. Add a `RUN` statement to the corresponding `Dockerfile` (eg. `RUN logstash-plugin install logstash-filter-json`)
 1. Add the associated plugin code configuration to the service configuration (eg. Logstash input/output)
-1. Rebuild the images using the `docker-compose build` command
+1. Rebuild the images using the `podman-compose build` command
 
 ### How to enable the provided extensions
 
@@ -371,10 +350,10 @@ variable, allowing the user to adjust the amount of memory that can be used by e
 | Elasticsearch | ES_JAVA_OPTS         |
 | Logstash      | LS_JAVA_OPTS         |
 
-To accomodate environments where memory is scarce (Docker Desktop for Mac has only 2 GB available by default), the Heap
-Size allocation is capped by default in the `docker-compose.yml` file to 512 MB for Elasticsearch and 256 MB for
+To accomodate environments where memory is scarce (Podman Desktop for Mac has only 2 GB available by default), the Heap
+Size allocation is capped by default in the `podman-compose.yml` file to 512 MB for Elasticsearch and 256 MB for
 Logstash. If you want to override the default JVM configuration, edit the matching environment variable(s) in the
-`docker-compose.yml` file.
+`podman-compose.yml` file.
 
 For example, to increase the maximum JVM Heap Size for Logstash:
 
@@ -392,12 +371,12 @@ When these options are not set:
 
 ### How to enable a remote JMX connection to a service
 
-As for the Java Heap memory (see above), you can specify JVM options to enable JMX and map the JMX port on the Docker
+As for the Java Heap memory (see above), you can specify JVM options to enable JMX and map the JMX port on the Podman
 host.
 
 Update the `{ES,LS}_JAVA_OPTS` environment variable with the following content (I've mapped the JMX service on the port
 18080, you can change that). Do not forget to update the `-Djava.rmi.server.hostname` option with the IP address of your
-Docker host (replace **DOCKER_HOST_IP**):
+Podman host (replace **DOCKER_HOST_IP**):
 
 ```yml
 logstash:
@@ -412,8 +391,8 @@ logstash:
 
 See the following Wiki pages:
 
-* [External applications](https://github.com/deviantony/docker-elk/wiki/External-applications)
-* [Popular integrations](https://github.com/deviantony/docker-elk/wiki/Popular-integrations)
+* [External applications](https://github.com/deviantony/podman-elk/wiki/External-applications)
+* [Popular integrations](https://github.com/deviantony/podman-elk/wiki/Popular-integrations)
 
 [elk-stack]: https://www.elastic.co/what-is/elk-stack
 [xpack]: https://www.elastic.co/what-is/open-x-pack
@@ -425,17 +404,17 @@ See the following Wiki pages:
 
 [elastdocker]: https://github.com/sherifabdlnaby/elastdocker
 
-[docker-install]: https://docs.docker.com/get-docker/
-[compose-install]: https://docs.docker.com/compose/install/
-[compose-v2]: https://docs.docker.com/compose/cli-command/
-[linux-postinstall]: https://docs.docker.com/engine/install/linux-postinstall/
+[podman-install]: https://docs.podman.com/get-podman/
+[compose-install]: https://docs.podman.com/compose/install/
+[compose-v2]: https://docs.podman.com/compose/cli-command/
+[linux-postinstall]: https://docs.podman.com/engine/install/linux-postinstall/
 
 [bootstrap-checks]: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
 [es-sys-config]: https://www.elastic.co/guide/en/elasticsearch/reference/current/system-config.html
 [es-heap]: https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html#heap-size-settings
 
-[win-filesharing]: https://docs.docker.com/desktop/windows/#file-sharing
-[mac-filesharing]: https://docs.docker.com/desktop/mac/#file-sharing
+[win-filesharing]: https://docs.podman.com/desktop/windows/#file-sharing
+[mac-filesharing]: https://docs.podman.com/desktop/mac/#file-sharing
 
 [builtin-users]: https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html
 [ls-monitoring]: https://www.elastic.co/guide/en/logstash/current/monitoring-with-metricbeat.html
@@ -448,8 +427,8 @@ See the following Wiki pages:
 [config-kbn]: ./kibana/config/kibana.yml
 [config-ls]: ./logstash/config/logstash.yml
 
-[es-docker]: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
-[kbn-docker]: https://www.elastic.co/guide/en/kibana/current/docker.html
-[ls-docker]: https://www.elastic.co/guide/en/logstash/current/docker-config.html
+[es-podman]: https://www.elastic.co/guide/en/elasticsearch/reference/current/podman.html
+[kbn-podman]: https://www.elastic.co/guide/en/kibana/current/podman.html
+[ls-podman]: https://www.elastic.co/guide/en/logstash/current/podman-config.html
 
 [upgrade]: https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-upgrade.html
